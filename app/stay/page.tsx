@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
-import { MobileBookBar, WhatsAppFab } from "@/components/StickyBar";
+import { MobileBookBar } from "@/components/StickyBar";
 import { SectionHead, Row, Tile, PullQuote } from "@/components/Sections";
 import { rooms, roomAmenities } from "@/content/rooms";
 import { pullQuotes } from "@/content/testimonials";
@@ -120,7 +120,6 @@ export default function StayPage() {
       </section>
 
       <MobileBookBar />
-      <WhatsAppFab />
     </>
   );
 }

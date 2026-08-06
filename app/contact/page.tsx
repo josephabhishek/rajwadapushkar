@@ -1,11 +1,11 @@
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import EnquiryForm from "@/components/EnquiryForm";
-import { WhatsAppFab } from "@/components/StickyBar";
 import { SectionHead, Facts } from "@/components/Sections";
 import { site } from "@/content/site";
 import { pageMeta } from "@/lib/meta";
 import { breadcrumbSchema, JsonLd } from "@/lib/schema";
+import { PhoneIcon, WhatsAppIcon, MailIcon } from "@/components/Icons";
 
 export const metadata = pageMeta({
   title: "Contact",
@@ -61,9 +61,37 @@ export default function ContactPage() {
                     ))}
                   </Info>
                   <Info label="Reservations">
-                    {site.contact.phone || site.contact.whatsapp
-                      ? [site.contact.phone, site.contact.whatsapp].filter(Boolean).join(" · ")
-                      : "Phone and WhatsApp to be confirmed"}
+                    <span className="flex flex-col gap-2">
+                      {site.contact.phone && (
+                        <a
+                          href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
+                          className="flex items-center gap-3 transition-colors hover:text-maroon"
+                        >
+                          <PhoneIcon className="h-[18px] w-[18px] shrink-0 text-maroon" />
+                          {site.contact.phone}
+                        </a>
+                      )}
+                      {site.contact.whatsapp && (
+                        <a
+                          href={`https://wa.me/${site.contact.whatsapp}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 transition-colors hover:text-maroon"
+                        >
+                          <WhatsAppIcon className="h-[18px] w-[18px] shrink-0 text-[#25D366]" />
+                          WhatsApp us
+                        </a>
+                      )}
+                      {site.contact.email && (
+                        <a
+                          href={`mailto:${site.contact.email}`}
+                          className="flex items-center gap-3 break-all transition-colors hover:text-maroon"
+                        >
+                          <MailIcon className="h-[18px] w-[18px] shrink-0 text-maroon" />
+                          {site.contact.email}
+                        </a>
+                      )}
+                    </span>
                   </Info>
                   <Info label="Also known as">
                     {site.alternateNames.join(" · ")}
@@ -110,8 +138,6 @@ export default function ContactPage() {
           </Reveal>
         </div>
       </section>
-
-      <WhatsAppFab />
     </>
   );
 }

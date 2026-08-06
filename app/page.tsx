@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import CurtainIntro from "@/components/CurtainIntro";
-import { MobileBookBar, WhatsAppFab } from "@/components/StickyBar";
+import { MobileBookBar } from "@/components/StickyBar";
 import {
   SectionHead, Split, Tile, PullQuote, Feature, Facts, Divider,
 } from "@/components/Sections";
@@ -139,7 +139,6 @@ export default function Home() {
       </section>
 
       <MobileBookBar />
-      <WhatsAppFab />
     </>
   );
 }

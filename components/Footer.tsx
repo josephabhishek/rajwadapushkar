@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { site } from "@/content/site";
+import { PhoneIcon, WhatsAppIcon, MailIcon } from "@/components/Icons";
 
 export default function Footer() {
   return (
@@ -40,8 +41,26 @@ export default function Footer() {
               Directions
             </Link>
             {site.contact.phone && (
-              <a href={`tel:${site.contact.phone}`} className="block py-[5px] text-base opacity-75 hover:opacity-100">
+              <a href={`tel:${site.contact.phone.replace(/\s+/g, "")}`} className="flex items-center gap-2.5 py-[5px] text-base opacity-75 hover:opacity-100">
+                <PhoneIcon className="h-4 w-4 shrink-0" />
                 {site.contact.phone}
+              </a>
+            )}
+            {site.contact.whatsapp && (
+              <a
+                href={`https://wa.me/${site.contact.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 py-[5px] text-base opacity-75 hover:opacity-100"
+              >
+                <WhatsAppIcon className="h-4 w-4 shrink-0" />
+                WhatsApp
+              </a>
+            )}
+            {site.contact.email && (
+              <a href={`mailto:${site.contact.email}`} className="flex items-center gap-2.5 break-all py-[5px] text-base opacity-75 hover:opacity-100">
+                <MailIcon className="h-4 w-4 shrink-0" />
+                {site.contact.email}
               </a>
             )}
           </div>

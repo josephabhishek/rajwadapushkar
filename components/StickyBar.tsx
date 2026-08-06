@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { waLink, hasWhatsApp } from "@/lib/wa";
+import { WhatsAppIcon } from "@/components/Icons";
 
 export function MobileBookBar({ label = "Book your stay" }: { label?: string }) {
   return (
@@ -13,6 +14,12 @@ export function MobileBookBar({ label = "Book your stay" }: { label?: string }) 
   );
 }
 
+/**
+ * WhatsApp floating button. Rendered once in the root layout so it sits on every
+ * page. It clears the mobile book bar on small screens and drops to the corner
+ * on larger ones. On desktop a label slides out on hover; on mobile the icon
+ * stands alone. A soft pulse ring draws the eye without nagging.
+ */
 export function WhatsAppFab() {
   const href = waLink();
   const external = hasWhatsApp();
@@ -22,11 +29,15 @@ export function WhatsAppFab() {
       href={href}
       aria-label="Message us on WhatsApp"
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="fixed bottom-[86px] right-4 z-[810] flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[#25D366] shadow-[0_6px_22px_rgba(0,0,0,.2)] lg:hidden"
+      className="group fixed bottom-[86px] right-4 z-[810] flex items-center gap-0 rounded-full bg-[#25D366] pl-[15px] pr-[15px] shadow-[0_8px_26px_rgba(37,211,102,.45)] transition-[gap,padding] duration-300 hover:gap-2 hover:pr-5 lg:bottom-6 lg:right-6"
     >
-      <svg viewBox="0 0 24 24" className="h-7 w-7 fill-white">
-        <path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z" />
-      </svg>
+      <span className="pointer-events-none absolute inset-0 -z-10 animate-ping rounded-full bg-[#25D366] opacity-30 [animation-duration:2.4s]" />
+      <span className="flex h-[54px] w-6 items-center justify-center">
+        <WhatsAppIcon className="h-7 w-7 text-white" />
+      </span>
+      <span className="max-w-0 overflow-hidden whitespace-nowrap text-[13px] font-medium tracking-wide text-white transition-[max-width] duration-300 group-hover:max-w-[160px]">
+        Chat with us
+      </span>
     </a>
   );
 }

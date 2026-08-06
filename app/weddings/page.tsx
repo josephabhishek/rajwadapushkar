@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
-import { MobileBookBar, WhatsAppFab } from "@/components/StickyBar";
+import { MobileBookBar } from "@/components/StickyBar";
 import { SectionHead, Row, PullQuote, Feature, Facts } from "@/components/Sections";
 import { weddingRows, weddingIncludes } from "@/content/weddings";
 import { site } from "@/content/site";
@@ -96,7 +96,6 @@ export default function WeddingsPage() {
       />
 
       <MobileBookBar label="Enquire about your date" />
-      <WhatsAppFab />
     </>
   );
 }

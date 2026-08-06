@@ -135,7 +135,15 @@ export async function deliver(payload: EnquiryPayload): Promise<DeliveryResult> 
     if (!res.ok) {
       const detail = await res.text().catch(() => "");
       console.error("[enquiry] resend rejected the send", res.status, detail);
-      return { ok: false, error: "We could not send that just now." };
+      // Surface Resend's own words during setup so the cause is visible.
+      let reason = "";
+      try {
+        reason = JSON.parse(detail)?.message ?? "";
+      } catch {}
+      return {
+        ok: false,
+        error: reason ? `Resend: ${reason}` : "We could not send that just now.",
+      };
     }
 
     return { ok: true };

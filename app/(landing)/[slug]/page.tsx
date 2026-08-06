@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
-import { MobileBookBar, WhatsAppFab } from "@/components/StickyBar";
+import { MobileBookBar } from "@/components/StickyBar";
 import { Facts, Feature } from "@/components/Sections";
 import { landings } from "@/content/landing";
 import { pageMeta } from "@/lib/meta";
@@ -98,7 +98,6 @@ export default async function LandingPage({
       />
 
       <MobileBookBar />
-      <WhatsAppFab />
     </>
   );
 }

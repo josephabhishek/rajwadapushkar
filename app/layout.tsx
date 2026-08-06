@@ -6,6 +6,7 @@ import { hotelSchema, JsonLd } from "@/lib/schema";
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { WhatsAppFab } from "@/components/StickyBar";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -88,6 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         {children}
         <Footer />
+        <WhatsAppFab />
       </body>
     </html>
   );

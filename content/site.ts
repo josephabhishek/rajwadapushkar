@@ -11,11 +11,13 @@ export const site = {
 
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://rajwadaresortpushkar.com",
 
-  /** Reservations. Unverified — confirm with the property before launch. */
+  /** Reservations. */
   contact: {
-    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "",
-    phone: process.env.NEXT_PUBLIC_PHONE ?? "",
-    email: process.env.NEXT_PUBLIC_EMAIL ?? "",
+    // Digits only, country code, no + or spaces — for the wa.me link.
+    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "919929971645",
+    // Display form, for tel: links and on-screen text.
+    phone: process.env.NEXT_PUBLIC_PHONE ?? "+91 99299 71645",
+    email: process.env.NEXT_PUBLIC_EMAIL ?? "rajwadaresortpushkar01@gmail.com",
   },
 
   address: {

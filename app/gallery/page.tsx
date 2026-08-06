@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
-import { MobileBookBar, WhatsAppFab } from "@/components/StickyBar";
+import { MobileBookBar } from "@/components/StickyBar";
 import { gallery } from "@/content/gallery";
 import { pageMeta } from "@/lib/meta";
 import { breadcrumbSchema, JsonLd } from "@/lib/schema";
@@ -69,7 +69,6 @@ export default function GalleryPage() {
       </section>
 
       <MobileBookBar />
-      <WhatsAppFab />
     </>
   );
 }

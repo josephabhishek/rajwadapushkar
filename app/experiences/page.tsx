@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
-import { MobileBookBar, WhatsAppFab } from "@/components/StickyBar";
+import { MobileBookBar } from "@/components/StickyBar";
 import { Tile, Split, PullQuote, Feature } from "@/components/Sections";
 import { featured, secondary } from "@/content/experiences";
 import { pullQuotes } from "@/content/testimonials";
@@ -110,7 +110,6 @@ export default function ExperiencesPage() {
       />
 
       <MobileBookBar />
-      <WhatsAppFab />
     </>
   );
 }
