@@ -35,6 +35,14 @@ body {
 }
 body.is-locked { overflow: hidden; }
 
+/* The curtain ships closed inside the server HTML so it is on screen in the very
+   first paint — no flash of the hero before it arrives. It is hidden by default
+   and only revealed by the boot script in app/layout.tsx, so anyone without
+   working JavaScript sees the site straight away rather than a stuck curtain. */
+.curtain-intro { display: none; }
+html[data-intro="play"] .curtain-intro { display: block; }
+html[data-intro="play"] body { overflow: hidden; }
+
 body::before {
   content: "";
   position: fixed;
@@ -138,6 +146,14 @@ textarea.field { resize: vertical; min-height: 90px; }
 
 .zoomable img { transform: scale(1.04); transition: transform 1.4s ease-out; }
 .zoomable:hover img { transform: scale(1); }
+
+/* Without backdrop-filter the bar would be a washed-out translucent panel with
+   nothing frosting the photo behind it. Fall back to near-solid instead. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav-glass {
+    background-color: rgba(255, 255, 255, 0.94) !important;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

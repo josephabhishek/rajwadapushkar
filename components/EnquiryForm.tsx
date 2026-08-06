@@ -14,6 +14,8 @@ const schema = z.object({
   dates: z.string().optional().default(""),
   guests: z.string().optional().default(""),
   message: z.string().optional().default(""),
+  /* Honeypot — hidden from people, irresistible to bots. */
+  company: z.string().optional().default(""),
 });
 
 type Values = z.input<typeof schema>;
@@ -26,7 +28,8 @@ const SUBJECTS = [
 ];
 
 export default function EnquiryForm() {
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "pending">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "pending" | "failed">("idle");
+  const [failure, setFailure] = useState("");
   const {
     register,
     handleSubmit,
@@ -38,8 +41,18 @@ export default function EnquiryForm() {
     const parsed = schema.safeParse(raw);
     if (!parsed.success) return;
     setState("sending");
-    const res = await submitEnquiry(parsed.data);
-    setState(res.pending ? "pending" : res.ok ? "sent" : "idle");
+    try {
+      const res = await submitEnquiry(parsed.data);
+      if (res.ok) setState("sent");
+      else if (res.pending) setState("pending");
+      else {
+        setFailure(res.error ?? "We could not send that just now.");
+        setState("failed");
+      }
+    } catch {
+      setFailure("We could not send that just now.");
+      setState("failed");
+    }
   });
 
   const waHref = () => {
@@ -85,6 +98,16 @@ export default function EnquiryForm() {
       <input className="field" placeholder="Number of guests" {...register("guests")} />
       <textarea className="field" placeholder="Anything we should know" {...register("message")} />
 
+      {/* Not for people. Hidden from sight, from tab order and from screen readers. */}
+      <input
+        {...register("company")}
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[-9999px] h-px w-px opacity-0"
+      />
+
       <div className="mt-3.5 flex flex-wrap items-center gap-6">
         <button type="submit" className="btn" disabled={state === "sending"}>
           {state === "sending" ? "Sending…" : "Send enquiry"}
@@ -96,10 +119,18 @@ export default function EnquiryForm() {
         )}
       </div>
 
-      {state === "pending" && (
-        <p className="text-sm text-maroon">
-          Enquiry delivery is not connected yet. Please call or message the resort directly in the
-          meantime.
+      {(state === "pending" || state === "failed") && (
+        <p role="alert" className="text-sm text-maroon">
+          {state === "pending"
+            ? "Email enquiries are not switched on yet."
+            : `${failure} Nothing has been lost — please try again.`}{" "}
+          {waHref() ? (
+            <a href={waHref()!} target="_blank" rel="noopener noreferrer" className="underline">
+              Send it on WhatsApp instead
+            </a>
+          ) : (
+            "Please call the resort directly in the meantime."
+          )}
         </p>
       )}
     </form>

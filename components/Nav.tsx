@@ -6,26 +6,30 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { site } from "@/content/site";
 
+/**
+ * Frosted glass bar. It is glass from the first frame rather than switching
+ * between transparent and solid, so the type is always dark and always legible
+ * over whatever photograph happens to be behind it. The only thing scrolling
+ * changes is how opaque and how tall it is.
+ *
+ * White sits at 68%. Lighter than that and the maroon mark starts to struggle
+ * over a dark frame; heavier and it stops reading as glass.
+ */
 export default function Nav({ overHero = true }: { overHero?: boolean }) {
-  const [solid, setSolid] = useState(!overHero);
+  const [scrolled, setScrolled] = useState(!overHero);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     if (!overHero) {
-      setSolid(true);
+      setScrolled(true);
       return;
     }
-    const threshold = () => window.innerHeight * (pathname === "/" ? 0.82 : 0.5);
-    const onScroll = () => setSolid(window.scrollY > threshold());
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [overHero, pathname]);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [overHero]);
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -34,52 +38,47 @@ export default function Nav({ overHero = true }: { overHero?: boolean }) {
     return () => document.body.classList.remove("is-locked");
   }, [open]);
 
-  const light = !solid;
-
   return (
     <>
       <nav
-        className={`fixed inset-x-0 top-0 z-[900] flex items-center justify-between transition-all duration-400 ${
-          solid
-            ? "bg-paper px-6 py-[15px] shadow-[0_1px_0_var(--hair),0_8px_30px_rgba(0,0,0,.05)] md:px-10"
-            : "px-6 py-[26px] md:px-10"
+        className={`nav-glass fixed inset-x-0 top-0 z-[900] flex items-center justify-between border-b backdrop-blur-xl backdrop-saturate-150 transition-all duration-400 ${
+          scrolled
+            ? "border-[rgba(43,36,31,0.10)] bg-white/94 px-6 py-3 shadow-[0_6px_28px_rgba(43,36,31,0.10)] md:px-10"
+            : "border-white/50 bg-white/86 px-6 py-[18px] md:px-10"
         }`}
       >
-        <Link href="/" aria-label={site.name}>
+        <Link href="/" aria-label={site.name} className="relative shrink-0">
           <Image
             src="/images/10-brand/rajwada-logo-mark.png"
             alt={site.name}
             width={519}
             height={442}
             priority
-            className={`w-auto transition-all duration-400 ${
-              solid ? "h-9 brightness-100 invert-0" : "h-11 brightness-0 invert"
-            }`}
+            className={`w-auto transition-all duration-400 ${scrolled ? "h-8" : "h-10"}`}
           />
         </Link>
 
-        <div className="hidden items-center gap-[34px] lg:flex">
+        {/* Shown from 900px up. Tighter spacing in the middle range so the full
+            menu fits rather than collapsing to a burger on a laptop. */}
+        <div className="relative hidden items-center gap-5 min-[900px]:flex xl:gap-[34px]">
           {site.nav.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`border-b pb-[3px] text-[11.5px] font-medium uppercase tracking-[0.2em] transition-opacity ${
-                  light ? "text-white" : "text-ink"
-                } ${
-                  active
-                    ? light
-                      ? "border-white/55 opacity-100"
-                      : "border-maroon opacity-100"
-                    : `border-transparent ${light ? "opacity-85" : "opacity-70"} hover:opacity-100`
+                className={`whitespace-nowrap border-b pb-[3px] text-[11px] font-medium uppercase tracking-[0.14em] text-ink transition-colors hover:text-maroon xl:text-[11.5px] xl:tracking-[0.2em] ${
+                  active ? "border-maroon" : "border-transparent"
                 }`}
               >
                 {item.label}
               </Link>
             );
           })}
-          <Link href="/contact" className="btn !px-7 !py-[14px]">
+          <Link
+            href="/contact"
+            className="btn whitespace-nowrap !px-5 !py-[11px] xl:!px-7 xl:!py-[13px]"
+          >
             Book now
           </Link>
         </div>
@@ -87,21 +86,16 @@ export default function Nav({ overHero = true }: { overHero?: boolean }) {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open menu"
-          className="cursor-pointer border-0 bg-transparent p-1.5 lg:hidden"
+          className="relative cursor-pointer border-0 bg-transparent p-1.5 min-[900px]:hidden"
         >
           {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className={`my-1.5 block h-[1.5px] w-[26px] transition-colors duration-400 ${
-                light ? "bg-white" : "bg-ink"
-              }`}
-            />
+            <span key={i} className="my-1.5 block h-[1.5px] w-[26px] bg-ink" />
           ))}
         </button>
       </nav>
 
       <div
-        className={`fixed inset-0 z-[950] overflow-y-auto bg-paper px-8 pb-10 pt-24 transition-transform duration-600 [transition-timing-function:var(--ease-slow)] ${
+        className={`fixed inset-0 z-[950] overflow-y-auto bg-paper/95 px-8 pb-10 pt-24 backdrop-blur-2xl transition-transform duration-600 [transition-timing-function:var(--ease-slow)] ${
           open ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -124,6 +118,9 @@ export default function Nav({ overHero = true }: { overHero?: boolean }) {
             {item.label}
           </Link>
         ))}
+        <Link href="/contact" className="btn mt-9 inline-block">
+          Book now
+        </Link>
       </div>
     </>
   );
