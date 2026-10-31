@@ -16,7 +16,7 @@ export const site = {
     // Digits only, country code, no + or spaces — for the wa.me link.
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "919119143789",
     // Display form, for tel: links and on-screen text.
-    phone: process.env.NEXT_PUBLIC_PHONE ?? "+91 9119143789",
+    phone: process.env.NEXT_PUBLIC_PHONE ?? "+91 91191 43789",
     email: process.env.NEXT_PUBLIC_EMAIL ?? "pushkarrajwararesort@gmail.com",
   },
 
